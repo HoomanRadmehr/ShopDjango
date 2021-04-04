@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    CHECK OUT
+{% endblock %}
+
+{% block content %}
+
+    {% if takhfif %}
+        <h3 style="color: green;">Congratulations!!!</h3><br>
+        <h3>Now you must pay  <em><span style="color: blue;">{{order.get_total_price_with_coupon}} $</span></em> instead of <span style="color: red;">{{order.get_total_price}} $ </span> for your cart</h3>
+        <input type="sumbit" class = 'btn btn-primary' value="Pay">
+    {% else %}
+        <h3>You must pay {{order.get_total_price}} $ for your cart <br>Are you accept that?</h3><br>
+        <input type="sumbit" class = 'btn btn-primary' value="Accept and pay">
+        <hr>
+        <p> If You have active coupon you can discounting your payment </p><br>
+        <form action="{% url 'orders:coupon_apply' order.id %}" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" class = 'btn btn-primary' value="Discount">
+        </form>
+    {% endif %}
+{% endblock %}

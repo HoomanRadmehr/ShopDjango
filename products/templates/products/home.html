@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %} Radmehr Shop {% endblock %}
+
+{% block content %}
+<form action="{% url 'products:home'%}" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" class = 'btn btn-primary' value="filter">
+</form>
+<div class="dropdown" style="display: block;text-align: center;">
+    <p> You can select your category to find out your product easier:</p>
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+        Categories
+        </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for cat in categories %}
+        <a class="dropdown-item" href="{{cat.get_absolute_url}}">
+            <ul>
+            {{cat.name}}
+            {% for brand in brands %}
+                {% if brand.category == cat %}
+                    <li>
+                        <a href="{{brand.get_absolute_url}}">{{ brand.name }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </a>
+        <div class="dropdown-divider"></div>
+    {% endfor %}
+    <a class="dropdown-item" href="{% url 'products:home' %}">All products</a>
+    </div>
+</div>
+<br>
+{% for product in products %}
+    <div class="card" style="width: 18rem; display: inline-block;">
+        {% thumbnail product.image "300x300" crop="center" as im %}
+            <img src="{{ im.url }}" class="card-img-top" width="{{ im.width }}" height="{{ im.height }}" alt="{{product.category}}">
+        {% endthumbnail %}
+        <!-- <img class="card-img-top" src="{{product.image.url}}" alt="{{product.category}}"> -->
+            <div class="card-body">
+                <h5 class="card-title" style ="text-align: center; color:black;">{{product.name}}</h5>
+                <p class="card-text" style ="text-align: center; color: red;">{{product.price}}$</p>
+                <a href="{{product.get_absolute_url}}" class="btn btn-primary" style ="display:block ;margin-left: auto; margin-right: auto;">More details</a>
+            </div>
+    </div>
+{% endfor %}
+{% endblock %}
+

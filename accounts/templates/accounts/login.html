@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %} Log in {% endblock %}
+
+{% block content %} 
+<div style="text-align: center;"><h2> LOG IN </h2></div> <br>
+<form action="{% url 'accounts:user_login' %}" method='POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <br>
+    <input type="submit" class="btn btn-primary" value="Log in">
+</form>
+{% endblock %}
